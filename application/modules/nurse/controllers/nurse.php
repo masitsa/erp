@@ -246,7 +246,7 @@ class Nurse  extends MX_Controller
 
 		$order = 'service_charge.service_charge_name';
 
-		$where = 'service_charge.service_id = service.service_id AND (service.service_name = "Procedure" OR service.service_name = "procedure" OR service.service_name = "procedures" OR service.service_name = "Procedures" ) AND service.department_id = departments.department_id AND departments.department_name = "General practice" AND service.branch_code = "OSH" AND service_charge.visit_type_id = visit_type.visit_type_id  AND service_charge.visit_type_id = '.$visit_t;
+		$where = 'service_charge.service_id = service.service_id AND (service.service_name = "Procedure" OR service.service_name = "procedure" OR service.service_name = "procedures" OR service.service_name = "Procedures" ) AND service.department_id = departments.department_id AND departments.department_name = "General practice" AND service.branch_code = "ALEH" AND service_charge.visit_type_id = visit_type.visit_type_id  AND service_charge.visit_type_id = '.$visit_t;
 
 		$table = 'service_charge,visit_type,service, departments';
 		$config["per_page"] = 0;
@@ -649,6 +649,7 @@ class Nurse  extends MX_Controller
 	public function save_nurse_notes($visit_id)
 	{
 		$signature_name = '';
+		$personnel_id = $this->session->userdata('personnel_id');
 		if(isset($_POST['signature']))
 		{
 			$this->load->library('signature/signature');
@@ -661,22 +662,72 @@ class Nurse  extends MX_Controller
 			imagepng($img, $this->signature_path.'\\'.$image_name);
 			//imagedestroy($img);
 		}
-		
-		if($this->nurse_model->add_notes($visit_id, $signature_name))
+		//var_dump($personnel_id); die();
+		if($this->nurse_model->add_notes($visit_id, 1, $signature_name, $personnel_id))
 		{
+			$v_data['visit_id'] = $visit_id;
 			$v_data['signature_location'] = $this->signature_location;
-			$v_data['query'] = $this->nurse_model->get_notes(1);
+			$v_data['mobile_personnel_id'] = $this->session->userdata('personnel_id');
+			$v_data['query'] = $this->nurse_model->get_notes(1, $visit_id);
 			$return['result'] = 'success';
 			$return['message'] = $this->load->view('patients/notes', $v_data, TRUE);
-			echo 'success';
+			echo json_encode($return);
 		}
 		
 		else
 		{
-			echo 'fail';
+			$return['result'] = 'false';
+			echo json_encode($return);
 		}
 		// end of things to do with the trail
 	}
+	
+	public function update_nurse_notes($notes_id, $notes_type_id, $visit_id)
+	{
+		$signature_name = '';
+		$personnel_id = $this->session->userdata('personnel_id');
+		if($this->nurse_model->update_notes($notes_id, $signature_name, $personnel_id))
+		{
+			$v_data['visit_id'] = $visit_id;
+			$v_data['signature_location'] = $this->signature_location;
+			$v_data['mobile_personnel_id'] = $this->session->userdata('personnel_id');
+			$v_data['query'] = $this->nurse_model->get_notes($notes_type_id, $visit_id);
+			$return['result'] = 'success';
+			$return['message'] = $this->load->view('patients/notes', $v_data, TRUE);
+			echo json_encode($return);
+		}
+		
+		else
+		{
+			$return['result'] = 'false';
+			echo json_encode($return);
+		}
+		// end of things to do with the trail
+	}
+	
+	public function delete_nurse_notes($notes_id, $notes_type_id, $visit_id)
+	{
+		$signature_name = '';
+		$personnel_id = $this->session->userdata('personnel_id');
+		if($this->nurse_model->delete_notes($notes_id, $personnel_id))
+		{
+			$v_data['visit_id'] = $visit_id;
+			$v_data['signature_location'] = $this->signature_location;
+			$v_data['mobile_personnel_id'] = $personnel_id;
+			$v_data['query'] = $this->nurse_model->get_notes($notes_type_id, $visit_id);
+			$return['result'] = 'success';
+			$return['message'] = $this->load->view('patients/notes', $v_data, TRUE);
+			echo json_encode($return);
+		}
+		
+		else
+		{
+			$return['result'] = 'false';
+			echo json_encode($return);
+		}
+		// end of things to do with the trail
+	}
+
 	
 	public function dental_vitals($visit_id)
 	{

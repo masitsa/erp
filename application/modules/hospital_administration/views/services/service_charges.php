@@ -30,7 +30,7 @@
 				<?php 
 			}
 			
-            else if($department_id == 17)
+            else if(($department_id == 17) && ($service_id == 14))
 			{
 				?>
 					<a href="<?php echo site_url()?>hospital_administration/services/import_bed_charges/<?php echo $service_id;?>" class="btn btn-sm btn-warning"><i class="fa fa-sign-out"></i> Import bed charges </a>
@@ -46,11 +46,12 @@
 			?>
 			<a href="<?php echo site_url()?>hospital-administration/services" class="btn btn-sm btn-primary"><i class="fa fa-angle-left"></i> Back to services </a>
 			
+			<a href="<?php echo site_url()?>hospital-administration/update-charges/<?php echo $service_id?>" class="btn btn-sm btn-warning"><i class="fa fa-recycle"></i> Update Charges </a>
+			
 		</div>
 	</div>
 </div>
-<div class="row">
-    <div class="col-md-12">
+
 		<?php
 		$result_two = "";
 		if($department_id == 5)
@@ -184,15 +185,13 @@
 			$result_three = "There are no service charges to be synced";
 		}
 		?>
+        
+		</div>
+	</section>
         <?php
 	}
 		?>
         <?php echo $result_three; ?>
-        
-		</div>
-	</section>
-</div>
-</div>
 <div class="row">
     <div class="col-md-12">
 

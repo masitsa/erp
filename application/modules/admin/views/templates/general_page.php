@@ -110,14 +110,35 @@
         <script src="<?php echo base_url()."assets/bluish/"?>js/jquery.flot.stack.js"></script>
         
 <link rel="stylesheet" href="<?php echo base_url()."assets/themes/bluish";?>/style/jquery.cleditor.css"> 
+ <link rel="stylesheet" href="<?php echo base_url()."assets/bluish";?>/style/owl.carousel.css">
 <script src="<?php echo base_url()."assets/themes/bluish";?>/js/jquery.cleditor.min.js"></script> <!-- CLEditor -->
 		<script type="text/javascript" src="<?php echo base_url();?>assets/themes/tinymce/tinymce.min.js"></script>
 		 <script src='<?php echo base_url()."assets/bluish/"?>src/jquery-customselect.js'></script>
 	    <link href='<?php echo base_url()."assets/bluish/"?>src/jquery-customselect.css' rel='stylesheet' />
+         <script src="<?php echo base_url()."assets/bluish/"?>src/owl.carousel.js"></script>
         <script type="text/javascript">
             tinymce.init({
                 selector: ".cleditor"
             });
         </script>
+<script>
+  $('.owl-carousel').owlCarousel({
+    loop:true,
+    margin:10,
+    nav:true,
+    responsive:{
+        0:{
+            items:1
+        },
+        600:{
+            items:1
+        },
+        1000:{
+            items:1
+        }
+    }
+})   
+</script>
+        
 	</body>
 </html>

@@ -636,7 +636,111 @@ class Services_model extends CI_Model
 		
 		else
 		{
-			$this->session->set_userdata('error_message', 'There are no lab tests.');
+			//get lab tests
+			$this->db->where('product_status = 1');
+			$products = $this->db->get('product');
+			
+			if($products->num_rows() > 0)
+			{
+				foreach($products->result() as $res)
+				{
+					$product_id = $res->product_id;
+					$product_name = $res->product_name;
+					$product_unitprice = $res->product_unitprice;
+					$product_unitprice_insurance = $res->product_unitprice_insurance;
+		
+					// get all the visit type
+					$this->db->where('visit_type_status', 1);
+					$visit_type_query = $this->db->get('visit_type');
+		
+					if($visit_type_query->num_rows() > 0)
+					{
+						foreach ($visit_type_query->result() as $key) {
+						
+							$visit_type_id = $key->visit_type_id;
+							if(empty($product_unitprice))
+							{
+								$product_unitprice = 0;
+							}
+							if(!empty($product_unitprice_insurance))
+							{
+								$product_unitprice_insurance = $product_unitprice_insurance;
+							}
+							else
+							{
+								$product_unitprice_insurance = round(($product_unitprice * 1.2), 0);
+							}
+							if($visit_type_id == 1)
+							{
+								// service charge entry
+								$service_charge_insert = array(
+											"service_charge_name" => $product_name,
+											"service_id" => $service_id,
+											"visit_type_id" => $visit_type_id,
+											"product_id" => $product_id,
+											"service_charge_amount" => $product_unitprice,
+											'service_charge_status' => 1,
+										);
+	
+							}
+							else
+							{
+								// service charge entry
+								$service_charge_insert = array(
+											"service_charge_name" => $product_name,
+											"service_id" => $service_id,
+											"visit_type_id" => $visit_type_id,
+											"product_id" => $product_id,
+											"service_charge_amount" => $product_unitprice_insurance,
+											'service_charge_status' => 1,
+										);
+							}
+							
+							
+							if($this->service_charge_exists($product_name, $visit_type_id))
+							{
+								$this->db->where(array('service_charge_name' => $product_name, 'visit_type_id' => $visit_type_id));
+								if($this->db->update('service_charge', $service_charge_insert))
+								{
+								}
+								
+								else
+								{
+								}
+							}
+							
+							else
+							{
+								$service_charge_insert['created'] = date('Y-m-d H:i:s');
+								$service_charge_insert['created_by'] = $this->session->userdata('personnel_id');
+								$service_charge_insert['modified_by'] = $this->session->userdata('personnel_id');
+								
+								if($this->db->insert('service_charge', $service_charge_insert))
+								{
+								}
+								
+								else
+								{
+								}
+							}
+	
+	
+						}
+					}
+	
+					$update_array = array('is_synced'=>1);
+					$this->db->where('product_id ='.$product_id);
+					$this->db->update('product',$update_array);
+	
+				}
+				
+				$this->session->set_userdata('success_message', 'Charges created successfully');
+			}
+			
+			else
+			{
+				$this->session->set_userdata('error_message', 'Unable to create charges');
+			}
 		}
 		
 		return TRUE;

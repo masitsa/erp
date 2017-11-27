@@ -44,12 +44,12 @@ class Auth extends MX_Controller
 			{
 				$newdata = array(
                    'login_status' => TRUE,
-                   'first_name'   => 'Alvaro',
+                   'first_name'   => 'Allan',
                    'username'     => 'amasitsa',
                    'personnel_type_id'     => '2',
                    'personnel_id' => 0,
-                   'branch_code'   => 'AAR',
-                   'branch_name'     => 'AAR Nairobi Branch',
+                   'branch_code'   => 'ALEH',
+                   'branch_name'     => 'ALEH ELDORET',
                    'branch_id' => 2
                );
 

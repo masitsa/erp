@@ -37,5 +37,11 @@ class Hospital_administration extends MX_Controller
 		$data['title'] = 'Dashboard';
 		$this->load->view('admin/templates/general_page', $data);
 	}
+
+	public function update_service_charges($service_id)
+	{
+		// get
+		$visit_type_rs = $this->services_model->get_all_services();
+	}
 }
 ?>

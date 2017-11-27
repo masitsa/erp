@@ -34,7 +34,8 @@ class Services extends Hospital_administration
 			}
 		}
 		// this is it
-		$where = 'service_delete = 0 AND service.branch_code = "'.$branch_code.'"';
+		//$where = 'service_delete = 0 AND service.branch_code = "'.$branch_code.'"';
+		$where = 'service_delete = 0';
 		$service_search = $this->session->userdata('service_search');
 		
 		if(!empty($service_search))
@@ -296,7 +297,7 @@ class Services extends Hospital_administration
 			{
 				// select * insurance service charge 
 
-				$this->db->where('patient_type <> 1 AND  service_charge_name = "'.$service_charge_name.'"');
+				$this->db->where('visit_type_id = '.$patient_type.' AND  service_charge_name = "'.$service_charge_name.'"');
 				$service_charges = $this->db->get('service_charge');
 
 				if($service_charges->num_rows() > 0)

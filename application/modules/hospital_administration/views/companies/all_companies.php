@@ -160,4 +160,11 @@
 							
                                 </div>
 							</div>
+							<div class="widget-foot">
+                                
+				<?php if(isset($links)){echo $links;}?>
+            
+                <div class="clearfix"></div> 
+            
+            </div>
 						</section>

@@ -109,6 +109,22 @@
                 
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-lg-8 control-label">RBS: </label>
+            
+            <div class="col-lg-4">
+                <input type="text" id="vital10"  class="form-control"/>
+                
+            </div>
+        </div>
+         <div class="form-group">
+            <label class="col-lg-8 control-label">BSA: </label>
+            
+            <div class="col-lg-4">
+                <input type="text" id="vital10"  class="form-control"/>
+                
+            </div>
+        </div>
     </div>
 </div>
 

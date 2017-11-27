@@ -14,14 +14,19 @@ class Companies extends Hospital_administration
 	*	Default action is to show all the companies
 	*
 	*/
-	public function index($order = 'insurance_company_name', $order_method = 'ASC') 
+	public function index() 
 	{
 		$where = 'insurance_company_id > 0';
 		$table = 'insurance_company';
 		//pagination
-		$segment = 5;
+	$order = 'insurance_company_name';
+	$order_method = 'ASC';
+
+		//pagination$order = 'insurance_company_name', $order_method = 'ASC'
+
+		$segment = 3;
 		$this->load->library('pagination');
-		$config['base_url'] = site_url().'admin/companies/'.$order.'/'.$order_method;
+		$config['base_url'] = site_url().'admin/companies';
 		$config['total_rows'] = $this->users_model->count_items($table, $where);
 		$config['uri_segment'] = $segment;
 		$config['per_page'] = 20;
@@ -52,7 +57,7 @@ class Companies extends Hospital_administration
 		$this->pagination->initialize($config);
 		
 		$page = ($this->uri->segment($segment)) ? $this->uri->segment($segment) : 0;
-        $data["links"] = $this->pagination->create_links();
+        $v_data["links"] = $this->pagination->create_links();
 		$query = $this->companies_model->get_all_companies($table, $where, $config["per_page"], $page, $order, $order_method);
 		
 		//change of order method 

@@ -352,7 +352,8 @@ class Nurse_model extends CI_Model
 	}
 
 
-	function submitvisitprocedure($procedure_id,$visit_id,$suck){
+	function submitvisitprocedure($procedure_id,$visit_id,$suck)
+	{//echo "purity";die();
 		$visit_data = array(
 			'procedure_id'=>$procedure_id,
 			'visit_id'=>$visit_id,
@@ -681,7 +682,7 @@ class Nurse_model extends CI_Model
 		return $this->db->get('visit_symptoms');
 	}
 
-	function get_visit_symptoms($visit_id){
+	public function get_visit_symptoms($visit_id){
 		$table = "status, visit_symptoms, symptoms";
 		$where = "visit_symptoms.visit_id = $visit_id AND visit_symptoms.symptoms_id = symptoms.symptoms_id AND visit_symptoms.status_id = status.status_id";
 		$items = "visit_symptoms.description, symptoms.symptoms_name, status.status_name, visit_symptoms.visit_symptoms_id";
@@ -908,10 +909,21 @@ class Nurse_model extends CI_Model
 		return $query;
 	}
 	function get_doctor_notes($patient_id){
-		$table = "doctor_notes";
+		$table = "doctor_patient_notes";
 		$where = "patient_id = ".$patient_id;
 		$items = "*";
-		$order = "doctor_note_id";
+		$order = "doctor_notes";
+		
+		$result = $this->database->select_entries_where($table, $where, $items, $order);
+		
+		return $result;
+		
+	}
+	function patient_illnes_notes($patient_id){
+		$table = "patient_illness";
+		$where = "patient_id = ".$patient_id;
+		$items = "*";
+		$order = "illness_notes";
 		
 		$result = $this->database->select_entries_where($table, $where, $items, $order);
 		
@@ -1626,7 +1638,7 @@ class Nurse_model extends CI_Model
 	
 	public function add_notes($visit_id, $notes_type_id, $signature_name, $personnel_id)
 	{
-		$notes=$this->input->post('nurse_notes');
+		$notes=$this->input->post('notes');
 		$date=$this->input->post('date');
 		$time=$this->input->post('time');
 
@@ -1646,6 +1658,31 @@ class Nurse_model extends CI_Model
 		if($this->db->insert('notes', $trail_data))
 		{
 			return $this->db->insert_id();
+		}
+		
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	public function update_notes($notes_id, $signature_name, $personnel_id)
+	{
+		$notes=$this->input->post('notes');
+		$date=$this->input->post('date');
+		$time=$this->input->post('time');
+
+		//  enter into the nurse notes trail 
+		$trail_data = array(
+        		"notes_name" => $notes,
+        		/*"notes_time" => $time,
+        		"notes_date" => $date,*/
+				'modified_by'=>$personnel_id
+	    	);
+		$this->db->where('notes_id', $notes_id);
+		if($this->db->update('notes', $trail_data))
+		{
+			return TRUE;
 		}
 		
 		else

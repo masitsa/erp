@@ -1,6 +1,4 @@
 <section class="panel">
-
- 
         <!-- Widget head -->
         <header class="panel-heading">
           <h4 class="pull-left"><i class="icon-reorder"></i><?php echo $title;?></h4>
